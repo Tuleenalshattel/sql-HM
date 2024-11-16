@@ -1,0 +1,74 @@
+الاسم :تولين الشطل
+الرقم :202210551
+
+
+Q1)
+create table employee
+( 
+person_name varchar2(40) not null,
+street varchar2(40),
+city varchar2(40)
+);
+
+create table company
+(
+company_name varchar2(100) primary key,
+city varchar2(100) not null
+);
+
+
+create table works
+( company_name varchar2(100),
+  salary decimal(7,2) ,
+  id number ,
+  FOREIGN KEY (ID) REFERENCES employee(ID) ,
+  FOREIGN KEY (company_name) REFERENCES company(company_name);
+
+);
+
+
+ create table manages
+(manager_id number not null,
+id number ,
+FOREIGN KEY (ID) REFERENCES employee(ID) 
+);
+
+
+Q2)
+A) select ID
+from depositor
+where ID not in  (select ID from borrower);
+
+
+
+B)select ID
+from customer
+where customer_street = (select customer_street from customer where ID = '12345')
+  AND customer_city = (select customer_city from customer where ID = '12345');
+
+
+
+C)select account.branch_name
+from account, depositor, customer
+where account.account_number = depositor.account_number
+  AND depositor.ID = customer.ID
+  AND customer.customer_city = 'Harrison';
+
+
+Q3)
+A)
+select
+day ,qty ,
+sum(qty) over (order by day) as cumQty
+from demand;
+
+
+B)
+select
+    product , day,   qty,
+    ROW_NUMBER() over (partition by product order by qty ASC) as RN
+from
+    demand
+where  
+    ROW_NUMBER() over (partition by product order by qty ASC) <= 2;
+
